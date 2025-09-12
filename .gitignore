@@ -1,0 +1,71 @@
+## ========== Visual Studio Project Files ==========
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[bB]uild/
+[Bb]in/
+[Oo]bj/
+
+# VS cache and temp
+*.VC.db
+*.VC.opendb
+ipch/
+.vs/
+
+# Logs
+*.log
+*.tlog
+
+# Debug files
+*.pdb
+*.idb
+*.ilk
+*.aps
+
+# Compiled files
+*.obj
+*.exe
+*.dll
+*.lib
+*.exp
+
+# Other intermediate files
+*.cache
+*.lastbuildstate
+*.sbr
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+*.opendb
+
+# Profiling
+*.psess
+*.vsp
+*.vspx
+
+# Packages
+*.nupkg
+*.snupkg
+
+# Backup & Misc
+*.bak
+*.tmp
+
+# Ignore accidentally created file
+0
+
+## ========== Files You Should Keep ==========
+!*.cpp
+!*.h
+!*.sln
+!*.vcxproj
+!*.vcxproj.filters
+!README.md
