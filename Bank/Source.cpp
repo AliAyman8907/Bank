@@ -9,13 +9,17 @@
 
 using namespace std;
 
+//Name of the file where all client information will be stored
 const string ClientsFileName = "Clients.txt";
 
+//Enum that represents the main operations the program can perform
 enum enDoWhat{ShowClientList = 1, AddNewClient = 2, DeleteClient = 3,
 			  UpdateClientInfo = 4, FindClient = 5 , Exit = 6};
 
+//Enum that maps each client field
 enum enClientInfo{AccountNum, PinCode, Name, Phone, Balance};
 
+//Represents a single client's data
 struct stClientInfo {
 	string AccountNum;
 	short PinCode;
@@ -26,6 +30,7 @@ struct stClientInfo {
 
 void MainMenuScreen();
 
+//Convert a client record into a line string to save in the file
 string convertRecordToLine(const stClientInfo& clientInfo, const string& sep = "#//#") {
 	return clientInfo.AccountNum + sep +
 		to_string(clientInfo.PinCode) + sep +
@@ -34,6 +39,7 @@ string convertRecordToLine(const stClientInfo& clientInfo, const string& sep = "
 		to_string(clientInfo.balance);
 }
 
+//Convert a line string from the file into a client record
 stClientInfo convertLineToRecord(const string& line, const string& sep = "#//#") {
 	vector<string> parts = MyLib::splitString(line, sep);
 	stClientInfo clientInfo{};
@@ -47,6 +53,7 @@ stClientInfo convertLineToRecord(const string& line, const string& sep = "#//#")
 	return clientInfo;
 }
 
+//Load all clients' info from the file into a vector
 vector<stClientInfo> loadClientInfoFromFile() {
 	string line;
 	vector<stClientInfo> vClientsInfo;
@@ -63,6 +70,7 @@ vector<stClientInfo> loadClientInfoFromFile() {
 	return vClientsInfo;
 }
 
+//Save all clients' info from a vector into the file
 void saveClientsInfoToFile(const vector<stClientInfo>& vClientsInfo) {
 	fstream ClientsInfo;
 	ClientsInfo.open(ClientsFileName, ios::out);
@@ -74,6 +82,7 @@ void saveClientsInfoToFile(const vector<stClientInfo>& vClientsInfo) {
 	ClientsInfo.close();
 }
 
+//Print details of a single client
 void printClientInfo(const vector<stClientInfo>& vClientsInfo, short vClientsInfoIndex) {
 	cout << "\nThe following are the client details:\n";
 	cout << "-----------------------------------------\n";
@@ -85,6 +94,7 @@ void printClientInfo(const vector<stClientInfo>& vClientsInfo, short vClientsInf
 	cout << "-----------------------------------------\n";
 }
 
+//Read client info from user
 void enterClientInfo(stClientInfo& clientInfo) {
 	cout << "Enter Pin Code: ";
 	cin >> clientInfo.PinCode;
@@ -119,6 +129,7 @@ void enterClientInfo(stClientInfo& clientInfo) {
 	}
 }
 
+//Find client index in the vector by account number
 short findClientIndexByAccountNum(const vector<stClientInfo>& vClientsInfo, const string& accountNum) {
 	for (int i = 0; i < vClientsInfo.size(); i++) {
 		string currentAccountNum = vClientsInfo[i].AccountNum;
@@ -129,6 +140,7 @@ short findClientIndexByAccountNum(const vector<stClientInfo>& vClientsInfo, cons
 	return -1;
 }
 
+//Read Yes/No input from user
 char readYesNo(const string& message) {
 	char answer;
 	cout << message;
@@ -143,12 +155,14 @@ char readYesNo(const string& message) {
 	return toupper(answer);
 }
 
+//Return to the main menu after finishing an operation
 void goBackToMainMenu() {
 	cout << "\n\nPress any key to go back to Main Menu...";
 	system("pause>0");
 	MainMenuScreen();
 }
 
+//Print the header of the client list screen
 void printClientListScreenHeader(const vector <stClientInfo>& vClientsInfo) {
 	string title = "Clients List [";
 	title += to_string(vClientsInfo.size());
@@ -166,6 +180,7 @@ void printClientListScreenHeader(const vector <stClientInfo>& vClientsInfo) {
 	MyLib::fillLineWithHypens();
 }
 
+//Show all clients on the screen in a table format
 void showClientsScreen(vector<stClientInfo>& vClientsInfo) {
 	printClientListScreenHeader(vClientsInfo);
 	cout << '\n';
@@ -182,6 +197,7 @@ void showClientsScreen(vector<stClientInfo>& vClientsInfo) {
 	MyLib::fillLineWithHypens();
 }
 
+//Add a new client and save it to the file
 void addNewClientScreen(vector<stClientInfo>& vClientsInfo, stClientInfo& clientInfo) {
 	char addAnotherClient;
 	short index;
@@ -219,6 +235,7 @@ void addNewClientScreen(vector<stClientInfo>& vClientsInfo, stClientInfo& client
 	} while (toupper(addAnotherClient) == 'Y');
 }
 
+//Delete a client by account number
 void deleteClientScreen(vector<stClientInfo>& vClientsInfo) {
 	string accountNum;
 	short index;
@@ -262,11 +279,13 @@ void deleteClientScreen(vector<stClientInfo>& vClientsInfo) {
 	} while (toupper(deleteAnotherClient) == 'Y');
 }
 
+//Update client info (keeping the same account number)
 void updateClientInfo(stClientInfo& clientInfo, string accountNum) {
 	clientInfo.AccountNum = accountNum;
 	enterClientInfo(clientInfo);
 }
 
+//Update a client's info and save the changes to the file
 void updateClientInfoScreen(vector <stClientInfo>& vClientsInfo, stClientInfo& clientInfo) {
 	string accountNum;
 	short index;
@@ -312,6 +331,7 @@ void updateClientInfoScreen(vector <stClientInfo>& vClientsInfo, stClientInfo& c
 	} while (toupper(updateAnotherClientInfo) == 'Y');
 }
 
+//Find and display client details by account number
 void findClientScreen(const vector <stClientInfo>& vClientsInfo) {
 	string accountNum;
 	short index;
@@ -340,6 +360,7 @@ void findClientScreen(const vector <stClientInfo>& vClientsInfo) {
 	} while (toupper(findAnotherClient) == 'Y');
 }
 
+//Exit program
 void exitScreen() {
 	system("cls");
 	cout << "-----------------------------------------\n";
@@ -348,6 +369,7 @@ void exitScreen() {
 	system("pause>0");
 }
 
+//Read user choice (1–6) from the menu
 enDoWhat readNumThatShowWhatToDo() {
 	short doWhat;
 	cout << "Choose what do you want to do? [1 to 6]? ";
@@ -362,6 +384,7 @@ enDoWhat readNumThatShowWhatToDo() {
 	return static_cast<enDoWhat>(doWhat);
 }
 
+//Handle user choice and call the right function
 void whatToDo(vector <stClientInfo>& vClientsInfo, stClientInfo& clientInfo) {
 	switch (readNumThatShowWhatToDo())
 	{
@@ -399,6 +422,7 @@ void whatToDo(vector <stClientInfo>& vClientsInfo, stClientInfo& clientInfo) {
 	goBackToMainMenu();
 }
 
+//Print the main menu options on screen
 void printMainMenuScreen() {
 	system("cls");
 	cout << "=================================================\n";
@@ -413,6 +437,7 @@ void printMainMenuScreen() {
 	cout << "=================================================\n";
 }
 
+//Loads client data and handles the main menu loop
 void MainMenuScreen() {
 	stClientInfo clientInfo{};
 	vector <stClientInfo> vClientsInfo = loadClientInfoFromFile();
@@ -420,6 +445,7 @@ void MainMenuScreen() {
 	whatToDo(vClientsInfo, clientInfo);
 }
 
+//Entry point of the program
 int main() {
 	MainMenuScreen();
 }
